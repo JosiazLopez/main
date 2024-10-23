@@ -1,0 +1,59 @@
+<?php
+session_start();
+$total = isset($_GET['total']) ? $_GET['total'] : 0;
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Pago</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="ASSETS/logo.jpeg" alt="Logo de A&S Global Cars">
+        </div>
+        <h1>J&S Global Cars</h1>
+    </header>
+
+    <main>
+        <center>
+            <h2>Datos de Pago</h2>
+            <p>Total a Pagar: $<?php echo number_format($total, 2); ?></p>
+        </center>
+        <form action="confirmacion.php" method="post" class="payment-form">
+            <input type="hidden" name="total" value="<?php echo $total; ?>">
+            
+            <label for="nombre">Nombre en la Tarjeta:</label>
+            <input type="text" id="nombre" name="nombre" required>
+            
+            <label for="tarjeta">Número de Tarjeta:</label>
+            <input type="text" id="tarjeta" name="tarjeta" required>
+            
+            <label for="expiracion">Fecha de Expiración (MM/AA):</label>
+            <input type="text" id="expiracion" name="expiracion" required>
+            
+            <label for="cvv">CVV:</label>
+            <input type="text" id="cvv" name="cvv" required>
+            
+            <label for="metodo">Método de Pago:</label>
+            <select id="metodo" name="metodo">
+                <option value="tarjeta">Tarjeta de Crédito/Débito</option>
+                <option value="paypal">PayPal</option>
+                <option value="transferencia">Transferencia Bancaria</option>
+            </select>
+            
+            <button type="submit">Confirmar Pago</button>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Importadora A&S Global Cars. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

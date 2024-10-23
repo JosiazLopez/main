@@ -2,6 +2,9 @@
 // Incluir el archivo de conexión
 include 'conexion.php';
 
+// Iniciar sesión
+session_start();
+
 // Verificar si se enviaron los datos del formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre_usuario = $_POST['usuario'];
@@ -16,15 +19,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Consultar la base de datos
     $stmt = $conexion->prepare("SELECT * FROM usuarios WHERE nombre_usuario = ? AND contrasena = ?");
-    $stmt->bind_param("ss", $nombre_usuario, $contrasena); // "ss" son dos strings: nombre_usuario y contrasena
-    
+    $stmt->bind_param("ss", $nombre_usuario, $contrasena);
     $stmt->execute();
     $resultado = $stmt->get_result();
 
     if ($resultado->num_rows > 0) {
         // ¡Inicio de sesión exitoso!
-        header("Location: index.html"); // Redirigir a index.html
-        exit(); // Asegúrate de usar exit() después de header() para detener la ejecución del script
+        $_SESSION['usuario'] = $nombre_usuario; // Guardar nombre de usuario en la sesión
+        header("Location: index.php"); // Redirigir a index.php
+        exit();
     } else {
         echo "Usuario o contraseña incorrectos.";
     }
