@@ -1,139 +1,94 @@
+<?php 
+session_start(); 
+?>
+
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio</title>
-    <link rel="stylesheet" href="estilos.css">
-	<link rel="stylesheet" media="screen and (max-width: 400px)" href="estilos-mobile.css">
-    <script src="cookies.js" defer></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Importadora - Carros</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <div class="header-content">
-            <img  src="logo.jpg" alt="GANGA GAMES SM Logo" class="logo">
-            <h1>GANGA GAMES SM</h1>
-			 <a href="carrito.php"><img src="carrito.png" class = "logo2"></a>
+        <div class="logo">
+            <img src="ASSETS/logo.jpeg" alt="Logo de A&S Global Cars">
         </div>
+        <h1>A&S Global Cars</h1>
+        <nav>
+            <ul class="navbar">
+                <li><a href="#"><img src="ASSETS/carro.png" alt="Vehículos Icono"> Vehículos</a></li>
+                <li><a href="#"><img src="ASSETS/ubicacion.png" alt="Ubicaciones Icono"> Ubicaciones</a></li>
+                <li><a href="financiamiento.html"><img src="ASSETS/financiamiento.png" alt="Financiamiento Icono"> Financiamiento</a></li>
+                <li><a href="#"><img src="ASSETS/subasta.png" alt="Subastas Icono"> Subastas online</a></li>
+                <li><a href="oferta.html"><img src="ASSETS/compra.png" alt="Ofertas Icono"> Ofertas!</a></li>
+                <li><a href="#"><img src="ASSETS/contact.png" alt="Contáctenos Icono"> Contáctenos</a></li>
+                
+                <!-- Mostrar el nombre de usuario si está conectado -->
+                <?php if (isset($_SESSION['usuario'])): ?>
+                    <li><a href="perfil.php"><img src="ASSETS/usuario.png" alt="Usuario Icono"> Bienvenido, <?php echo $_SESSION['usuario']; ?></a></li>
+                    <li><a href="logout.php"><img src="ASSETS/salida.png" alt="Cerrar sesión"> Cerrar sesión</a></li>
+                <?php else: ?>
+                    <li><a href="login.html"><img src="ASSETS/exito.png" alt="Sesion Icono"> Registrarse/Iniciar sesión</a></li>
+                <?php endif; ?>
+            </ul>
+        </nav>
     </header>
-    <nav>
-        <ul class="menu">
-            <li><a href="index.php">Inicio</a></li>    
-            <li><a href="sobrenosotros.php">Sobre Nosotros</a></li>
-            <li class="dropdown">
-         
-                <a href="#">Páginas</a>
-                <ul class="submenu">
-                    <li><a href="carrito.php">Carrito de Compras</a></li>
-                    <li><a href="pagos.php">Confirmación de Compra</a></li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
-    <main>
-        <section>
-            <center>
-            <h2>Productos Destacados</h2>
-			</center>
-           <?php session_start();
-$productos = array(
-    array("nombre" => "Nintendo Switch", "imagen" => "producto1.jpg", "precio" => 1500.00, "descripcion" => "Descripción del Producto 1"),
-    array("nombre" => "PlayStation 5", "imagen" => "producto2.jpg", "precio" => 1800.00, "descripcion" => "Descripción del Producto 2"),
-    array("nombre" => "Xbox Series X", "imagen" => "producto3.jpg", "precio" => 1700.00, "descripcion" => "Descripción del Producto 3"),
-    array("nombre" => "Nintendo Switch Lite", "imagen" => "producto4.jpg", "precio" => 1200.00, "descripcion" => "Descripción del Producto 4"),
-    array("nombre" => "PlayStation 4", "imagen" => "producto5.jpg", "precio" => 1000.00, "descripcion" => "Descripción del Producto 5"),
-    array("nombre" => "Xbox One", "imagen" => "producto6.jpg", "precio" => 900.00, "descripcion" => "Descripción del Producto 6"),
-    array("nombre" => "Nintendo 3DS", "imagen" => "producto7.jpg", "precio" => 500.00, "descripcion" => "Descripción del Producto 7"),
-    array("nombre" => "Nintendo Switch Pro Controller", "imagen" => "producto8.jpg", "precio" => 60.00, "descripcion" => "Descripción del Producto 8"),
-    array("nombre" => "PlayStation DualShock 4", "imagen" => "producto9.jpg", "precio" => 50.00, "descripcion" => "Descripción del Producto 9"),
-    array("nombre" => "Xbox Wireless Controller", "imagen" => "producto10.jpg", "precio" => 55.00, "descripcion" => "Descripción del Producto 10"),
-    // Agregar más productos aquí
-);
-?>
-
-  
 
     <main>
-    <section>
-        <div class="product-container">
-            <?php 
-            
-                foreach ($productos as $index => $producto) {
-                    echo '<div class="product" data-index="' . $index . '" draggable="true">';
-                    echo '<img src="' . $producto["imagen"] . '" alt="' . $producto["nombre"] . '" class="product-image">';
-                    echo '<h3>' . $producto["nombre"] . '</h3>';
-                    echo '<p>Precio: Q.' . number_format($producto["precio"], 2) . '</p>';
-                    echo '<button class="add-to-cart">Agregar al Carrito</button>';
-                    echo '<a class="view-description" href="descripciones.php?id=' . urlencode($producto["nombre"]) . '">Ver Descripción</a>';
-                    echo '</div>';
-                }
-                ?>
-            
-        </div>
-    </section>
-     <section>
-            <div id="carrito" class="carrito">
-                <a href="carrito.php"><img src="carrito.png" class="logo3"></a>
-            </div>
-        </section>
-   </main>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const productos = document.querySelectorAll(".product");
-            const carrito = document.getElementById("carrito");
-            const productosArray = <?php echo json_encode($productos); ?>;
+        <center>
+            <h2>Listado de Carros</h2>
+        </center>
+        <div class="car-list">
+            <!-- PHP para mostrar carros dinámicamente desde la base de datos -->
+            <?php
+            // Conexión a la base de datos
+            $conexion = new mysqli("localhost", "root", "root", "proyectosoftw");
 
-            productos.forEach((producto, index) => {
-                producto.addEventListener("dragstart", e => {
-                    const productoData = {
-                        nombre: productosArray[index].nombre,
-                        descripcion: productosArray[index].descripcion,
-                        precio: productosArray[index].precio
-                    };
-                    e.dataTransfer.setData("text/plain", JSON.stringify(productoData));
-                });
-
-                const addToCartButton = producto.querySelector(".add-to-cart");
-                addToCartButton.addEventListener("click", () => {
-                    const productoData = productosArray[index];
-                    addToCart(productoData);
-                });
-            });
-
-            carrito.addEventListener("dragover", e => {
-                e.preventDefault();
-            });
-
-            carrito.addEventListener("drop", e => {
-                e.preventDefault();
-                const productoData = JSON.parse(e.dataTransfer.getData("text/plain"));
-                if (productoData) {
-                    addToCart(productoData);
-                }
-            });
-
-            function addToCart(producto) {
-                fetch('actualizar_carrito.php', {
-                    method: 'POST',
-                    body: JSON.stringify({ producto }),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then(response => {
-                    if (response.ok) {
-                        window.location.href = 'carrito.php';
-                    }
-                });
+            // Verificar la conexión
+            if ($conexion->connect_error) {
+                die("Error de conexión: " . $conexion->connect_error);
             }
-        });
-    </script>
-    <div class="cookie-banner" id="cookieBanner">
-        <p>Este sitio web utiliza cookies para mejorar la experiencia del usuario. Al usar este sitio, aceptas el uso de cookies.</p>
-        <button class="accept-cookies" id="acceptCookies">Aceptar</button>
-    </div>
+
+            // Consulta para obtener todos los carros
+            $query = "SELECT * FROM productos";
+            $resultado = $conexion->query($query);
+
+            // Si hay resultados, mostrar cada carro
+            if ($resultado->num_rows > 0) {
+                while ($carro = $resultado->fetch_assoc()) {
+                    ?>
+                    <div class="car-item">
+                        <img src="<?php echo $carro['imagen']; ?>" alt="Imagen de <?php echo $carro['nombre']; ?>">
+                        <h3><?php echo $carro['nombre']; ?></h3>
+                        <p><?php echo $carro['descripcion']; ?></p>
+                        <p>Precio: $<?php echo $carro['precio']; ?></p>
+                        <!-- Botón para agregar al carrito -->
+                        <a href="agregar_carrito.php?id=<?php echo $carro['id']; ?>&nombre=<?php echo $carro['nombre']; ?>&precio=<?php echo $carro['precio']; ?>" class="buy-button">Comprar</a>
+                    </div>
+                    <?php
+                }
+            } else {
+                echo "<p>No hay carros disponibles.</p>";
+            }
+
+            // Cerrar la conexión
+            $conexion->close();
+            ?>
+        </div>
+    </main>
+
     <footer>
-        <p>&copy; <?php echo date("Y"); ?> GANGA GAMES SM </p>
+        <p>&copy; 2024 Importadora A&S Global Cars. Todos los derechos reservados.</p>
     </footer>
+    <ul class="social-media">
+        <li><a href="https://www.youtube.com/" target="_blank"><img src="ASSETS/youtube-icon.png" alt="YouTube Icon"></a></li>
+        <li><a href="https://www.facebook.com/" target="_blank"><img src="ASSETS/facebook-icon.png" alt="Facebook Icon"></a></li>
+        <li><a href="https://www.instagram.com/" target="_blank"><img src="ASSETS/instagram-icon.png" alt="Instagram Icon"></a></li>
+        <li><a href="https://twitter.com/" target="_blank"><img src="ASSETS/Whatsapp.png" alt="Twitter Icon"></a></li>
+    </ul>
+
+    <script src="scripts.js"></script>
 </body>
 </html>
